@@ -1,0 +1,1 @@
+"""Private Secret Santa application."""

@@ -1,0 +1,40 @@
+:root {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #233d35;
+  background: #f7f6f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 15px;
+  line-height: 1.6;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input, select, textarea { font: inherit; }
+button {
+  cursor: pointer; border: 1px solid #bdcbc1; border-radius: 8px; padding: 9px 16px;
+  background: white; color: #234b3c; font-weight: 600; transition: background .15s;
+}
+button:hover:not(:disabled) { background: #eef3eb; }
+button:disabled { opacity: .48; cursor: not-allowed; }
+button.primary { background: #285643; color: #fff; border-color: #285643; }
+button.primary:hover:not(:disabled) { background: #1a3e2e; }
+a { color: #285643; text-underline-offset: 3px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #b87b2e; outline-offset: 3px;
+}
+input, select, textarea {
+  display: block; width: 100%; background: #fffefa; color: #233d35;
+  border: 1px solid #b6c4b8; border-radius: 7px; padding: 10px 12px; margin-top: 6px;
+}
+input:disabled, select:disabled, textarea:disabled { background: #f3f4ef; opacity: 1; }
+textarea { resize: vertical; }
+label { display: block; font-size: .88rem; font-weight: 600; }
+fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { line-height: 1.2; }
+h3 { font-size: 1.25rem; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+progress { width: 100%; accent-color: #285643; }
+::selection { background: #dce8cf; }
