@@ -5,6 +5,7 @@ from email.message import EmailMessage
 from email.utils import formataddr, formatdate, make_msgid
 from typing import Literal
 
+from santa.mail_theme import CHRISTMAS_GIFS, render_html
 from santa.schemas import TOKEN, EventData
 
 Status = Literal["accepted", "failed", "uncertain"]
@@ -28,7 +29,8 @@ def render(data: EventData, giver: str = "Camille", recipient: str = "Alex") -> 
     def replace(template: str) -> str:
         return TOKEN.sub(lambda match: values[match.group(1)], template)
 
-    return {"subject": replace(data.subject), "body": replace(data.body)}
+    body = replace(data.body)
+    return {"subject": replace(data.subject), "body": body, "html": render_html(body)}
 
 
 def make_message(
@@ -42,6 +44,24 @@ def make_message(
     message["Date"] = formatdate(localtime=True)
     message["Message-ID"] = make_msgid()
     message.set_content(rendered["body"])
+    image_ids = {name: make_msgid() for name in CHRISTMAS_GIFS}
+    message.add_alternative(
+        render_html(
+            rendered["body"], {name: f"cid:{cid[1:-1]}" for name, cid in image_ids.items()}
+        ),
+        subtype="html",
+    )
+    html_part = message.get_body(preferencelist=("html",))
+    assert isinstance(html_part, EmailMessage)
+    for name, content in CHRISTMAS_GIFS.items():
+        html_part.add_related(
+            content,
+            maintype="image",
+            subtype="gif",
+            cid=image_ids[name],
+            disposition="inline",
+            filename=f"noel-{name}.gif",
+        )
     return message
 
 

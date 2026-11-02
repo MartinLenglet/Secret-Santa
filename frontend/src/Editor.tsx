@@ -225,6 +225,9 @@ export function Editor({ initial, onChanged, onDirty, onDuplicate, onDeleted }: 
             <label>Message<textarea rows={9} required maxLength={20000} value={draft.body} ref={bodyRef}
               onFocus={() => setTarget('body')}
               onChange={e => change({ ...draft, body: e.target.value })} /></label>
+            <p className="muted">Habillage Noël ultra kitsch inclus : sapin scintillant, cadeaux
+              animés et paillettes ! Votre message reste en texte simple, sans HTML à saisir.
+              Les GIFs sont intégrés au mail, sans images externes.</p>
             <p className="muted">Insérer dans {target === 'body' ? 'le message' : "l'objet"} :</p>
             <div className="tags">{tags.map(tag => <button type="button" key={tag}
               onClick={() => insertTag(tag)}>{`{{${tag}}}`}</button>)}</div>
@@ -250,7 +253,12 @@ export function Editor({ initial, onChanged, onDirty, onDuplicate, onDeleted }: 
           {verdict.message}</p>}
         {preview && <div className="preview">
           <strong>Aperçu fictif — Camille offre un cadeau à Alex</strong>
-          <p>Objet : {preview.subject}</p><pre>{preview.body}</pre>
+          <p>Objet : {preview.subject}</p>
+          <iframe className="mail-preview" title="Aperçu du mail de Noël"
+            sandbox="" referrerPolicy="no-referrer" srcDoc={preview.html} />
+          <details><summary>Version texte simple</summary><pre>{preview.body}</pre></details>
+          <p className="muted">Selon la messagerie, les images peuvent être masquées ou les GIFs
+            rester fixes. Le message reste lisible sans elles.</p>
         </div>}
         {!locked && <button className="primary" disabled={disabled || !verdict?.possible || !draft.sender}
           onClick={() => setConfirmation('draw')}>Effectuer le tirage</button>}

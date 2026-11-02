@@ -19,7 +19,7 @@ export interface SantaEvent {
   counts: Record<string, number>
 }
 export interface Verdict { possible: boolean; message: string }
-export interface Preview { subject: string; body: string }
+export interface Preview { subject: string; body: string; html: string }
 export interface Assignment { giver: string; recipient: string }
 export interface DeliveryStatus { giver: string; status: string; error: string | null }
 export interface MailResult { status: string; error: string | null }

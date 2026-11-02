@@ -35,6 +35,25 @@ beforeEach(() => {
 })
 
 describe('éditeur Secret Santa', () => {
+  it('affiche le mail festif dans un aperçu isolé et l’invalide après modification', async () => {
+    const html = '<!doctype html><html lang="fr"><body>HO ! HO ! HOOO !</body></html>'
+    mockedApi.mockResolvedValue({
+      subject: 'Secret pour Camille', body: 'Camille offre à Alex', html,
+    })
+    setup()
+    await userEvent.click(screen.getByRole('button', { name: 'Aperçu fictif du mail' }))
+    const frame = await screen.findByTitle('Aperçu du mail de Noël')
+    expect(frame).toHaveAttribute('sandbox', '')
+    expect(frame).toHaveAttribute('referrerpolicy', 'no-referrer')
+    expect(frame).toHaveAttribute('srcdoc', html)
+    expect(mockedApi).toHaveBeenCalledWith('/preview', 'POST', draft.data)
+    await userEvent.click(screen.getByText('Version texte simple'))
+    expect(screen.getByText('Camille offre à Alex')).toBeVisible()
+    await userEvent.type(screen.getByLabelText('Message'), ' !')
+    expect(screen.queryByTitle('Aperçu du mail de Noël')).not.toBeInTheDocument()
+    expect(mockedApi.mock.calls.some(([path]) => path.endsWith('/reveal'))).toBe(false)
+  })
+
   it('invalide la faisabilité dès une modification', async () => {
     mockedApi.mockResolvedValue({ possible: true, message: 'Configuration possible' })
     setup()

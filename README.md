@@ -14,6 +14,7 @@ pour l'interface en français, **FastAPI** pour le backend Python, **SQLite** po
 - Chaque personne donne et reçoit exactement un cadeau ; jamais à elle-même.
 - Budget, devise et date du cadeau facultatifs.
 - Objet et message personnalisables avec balises, aperçu fictif et mail de test.
+- Mails au format HTML avec un thème de Noël et des GIFs intégrés, accompagnés d'une version texte.
 - Tirage enregistré et verrouillé avant envoi ; progression et reprise des envois sans nouveau tirage.
 - Résultats masqués par défaut, consultables seulement après avertissement et confirmation.
 - Mot de passe d'application Gmail utilisé en mémoire, jamais enregistré.
@@ -187,8 +188,17 @@ ni historique d'envoi. Supprimer un événement ne rappelle pas les mails déjà
 | `{{date}}` | Date au format JJ/MM/AAAA, ou « Non précisée » |
 
 Ces balises fonctionnent dans l'objet et dans le corps en texte simple UTF-8.
-Les balises inconnues et les accolades mal formées sont refusées. Il n'y a pas de HTML,
-de code exécutable ou d'évaluation de modèles. L'aperçu utilise toujours des noms fictifs.
+Les balises inconnues et les accolades mal formées sont refusées. Aucun HTML saisi n'est exécuté :
+le message personnalisé est échappé avant d'être intégré au modèle HTML.
+Il n'y a pas de code exécutable ni d'évaluation de modèles.
+
+Chaque mail contient une version texte simple et une version HTML avec un thème de Noël.
+Les deux GIFs animés sont des créations originales fournies avec l'application et intégrées au mail,
+sans chargement d'images externes ni traçage. Aucune connexion au serveur local n'est nécessaire
+pour les afficher. Certaines messageries masquent les images ou n'affichent que la première
+image du GIF ; le message reste lisible sans elles.
+L'aperçu présente le rendu HTML avec des noms toujours fictifs et permet de consulter la version
+texte simple. Le mail de test utilise le même rendu que l'envoi aux participants.
 
 ## Envois interrompus et reprise
 

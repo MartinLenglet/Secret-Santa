@@ -129,17 +129,22 @@ def test_preview_test_and_successful_delivery(client, data, sent):
     assert "Camille" in preview["body"]
     assert "Alex" in preview["body"]
     assert "Non précisé" in preview["body"]
+    assert "HO ! HO ! HOOO !" in preview["html"]
+    assert "data:image/gif;base64," in preview["html"]
     event = draw(client, data)
     path = f"/api/events/{event['id']}"
     assert client.post(path + "/test-mail", json=SECRET).json()["status"] == "accepted"
     assert sent[0]["To"] == data["sender"]
     assert sent[0]["Subject"].startswith("[TEST")
+    assert "Camille" in sent[0].get_body(preferencelist=("html",)).get_content()
+    assert "Alex" in sent[0].get_body(preferencelist=("html",)).get_content()
     response = client.post(path + "/send", json=SECRET)
     assert response.json()["state"] == "sent"
     assert response.json()["counts"] == {"accepted": 4}
     assert len(sent) == 5
     assert len({message["To"] for message in sent[1:]}) == 4
     assert all(len(message.get_all("To")) == 1 for message in sent)
+    assert all(message.get_body(preferencelist=("html",)) is not None for message in sent)
     assert client.post(path + "/send", json=SECRET).status_code == 409
     assert client.get(path).headers["cache-control"] == "no-store"
     assert "abcdefghijklmnop" not in client.get("/api/events").text

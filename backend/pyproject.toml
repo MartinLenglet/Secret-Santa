@@ -21,6 +21,9 @@ dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.11,<1"]
 [tool.setuptools.packages.find]
 include = ["santa*"]
 
+[tool.setuptools.package-data]
+santa = ["assets/*.gif"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
